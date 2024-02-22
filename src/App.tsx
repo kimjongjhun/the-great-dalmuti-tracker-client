@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 
 import AddButton from "./Components/AddButton/AddButton";
 import ResultsTable from "./Components/ResultsTable/ResultsTable";
+import { rounds } from "./types/rounds";
 
 function App() {
   const [dataLoading, setDataLoading] = useState<boolean>(true);
-  const [dalmutiRounds, setDalmutiRounds] = useState([]);
+  const [dalmutiResults, setDalmutiResults] = useState<rounds>();
 
   useEffect(() => {
     getResults();
@@ -21,13 +22,15 @@ function App() {
       console.error("Error while fetching data:", e);
     }
 
-    setDalmutiRounds(rounds.data);
+    setDalmutiResults(rounds.data);
     setDataLoading(false);
   };
 
   return (
     <>
-      {!dataLoading && dalmutiRounds && <ResultsTable rounds={dalmutiRounds} />}
+      {!dataLoading && dalmutiResults && (
+        <ResultsTable rounds={dalmutiResults} />
+      )}
       <AddButton />
     </>
   );
