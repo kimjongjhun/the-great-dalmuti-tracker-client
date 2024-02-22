@@ -7,8 +7,13 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { rounds } from "../../types/rounds";
 
-const ResultsTable = ({ rounds }) => {
+interface ResultsTableProps {
+  rounds: rounds;
+}
+
+const ResultsTable = ({ rounds }: ResultsTableProps) => {
   const { results, numberOfPlayers } = rounds;
 
   const RenderPlayerNumber = ({ index }: { index: number }) => {
