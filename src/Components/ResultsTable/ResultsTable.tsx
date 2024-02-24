@@ -1,5 +1,4 @@
-import moment from "moment";
-
+import moment, { Moment } from "moment";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -7,13 +6,18 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+
 import { rounds } from "../../types/rounds";
+import AddNewRound from "../AddNewRound/AddNewRound";
 
 interface ResultsTableProps {
   rounds: rounds;
+  addNewRound: (arg0: {
+    requestBody: { date: Moment; results: string[] };
+  }) => void;
 }
 
-const ResultsTable = ({ rounds }: ResultsTableProps) => {
+const ResultsTable = ({ rounds, addNewRound }: ResultsTableProps) => {
   const { results, numberOfPlayers } = rounds;
 
   const RenderPlayerNumber = ({ index }: { index: number }) => {
@@ -45,6 +49,7 @@ const ResultsTable = ({ rounds }: ResultsTableProps) => {
         <TableRow>
           <TableCell align={"center"}>Date</TableCell>
           {dataCells}
+          <TableCell align={"center"}>Actions</TableCell>
         </TableRow>
       </TableHead>
     );
@@ -79,8 +84,12 @@ const ResultsTable = ({ rounds }: ResultsTableProps) => {
   return (
     <TableContainer component={Paper}>
       <Table>
-        {<RenderTableHead />}
-        {<RenderTableBody />}
+        <RenderTableHead />
+        <RenderTableBody />
+        <AddNewRound
+          numberOfPlayers={numberOfPlayers}
+          addNewRound={addNewRound}
+        />
       </Table>
     </TableContainer>
   );
