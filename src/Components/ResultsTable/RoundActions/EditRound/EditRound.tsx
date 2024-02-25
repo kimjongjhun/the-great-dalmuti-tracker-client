@@ -2,12 +2,12 @@ import { IconButton } from "@mui/material";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
 interface EditRoundProps {
-  roundIndex: number;
+  editModalOpenTrue: () => void;
 }
 
-const EditRound = ({ roundIndex }: EditRoundProps) => {
+const EditRound = ({ editModalOpenTrue }: EditRoundProps) => {
   return (
-    <IconButton>
+    <IconButton onClick={editModalOpenTrue}>
       <EditOutlinedIcon />
     </IconButton>
   );

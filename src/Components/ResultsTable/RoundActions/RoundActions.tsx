@@ -3,13 +3,13 @@ import { ButtonGroup } from "@mui/material";
 import EditRound from "./EditRound/EditRound";
 
 interface RoundActionsProps {
-  roundIndex: number;
+  editModalOpenTrue: (roundIndex: number) => void;
 }
 
-const RoundActions = ({ roundIndex }: RoundActionsProps) => {
+const RoundActions = ({ editModalOpenTrue }: RoundActionsProps) => {
   return (
     <ButtonGroup>
-      <EditRound roundIndex={roundIndex} />
+      <EditRound editModalOpenTrue={editModalOpenTrue} />
     </ButtonGroup>
   );
 };
