@@ -9,6 +9,7 @@ import Paper from "@mui/material/Paper";
 
 import { rounds } from "../../types/rounds";
 import AddNewRound from "../AddNewRound/AddNewRound";
+import RoundActions from "./RoundActions/RoundActions";
 
 interface ResultsTableProps {
   rounds: rounds;
@@ -20,6 +21,7 @@ interface ResultsTableProps {
 const ResultsTable = ({ rounds, addNewRound }: ResultsTableProps) => {
   const { results, numberOfPlayers } = rounds;
 
+  console.log("\n- - - - - [MINE]: rounds - - - - -\n", rounds);
   const RenderPlayerNumber = ({ index }: { index: number }) => {
     let label;
 
@@ -59,7 +61,7 @@ const ResultsTable = ({ rounds, addNewRound }: ResultsTableProps) => {
     return (
       <TableBody>
         {results.map((round, index) => {
-          const { date, playerOrder } = round;
+          const { date, playerOrder, index: roundIndex } = round;
           const dataCells = [];
 
           const roundDate = moment(date).format("MM/DD/YYYY").toString();
@@ -74,6 +76,9 @@ const ResultsTable = ({ rounds, addNewRound }: ResultsTableProps) => {
             <TableRow key={index}>
               <TableCell align={"center"}>{roundDate}</TableCell>
               {dataCells}
+              <TableCell align={"center"}>
+                <RoundActions roundIndex={roundIndex} />
+              </TableCell>
             </TableRow>
           );
         })}
