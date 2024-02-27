@@ -11,7 +11,7 @@ function App() {
   const [dataLoading, setDataLoading] = useState<boolean>(true);
   const [dalmutiResults, setDalmutiResults] = useState<rounds>();
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
-  const [roundToEdit, setRoundToEdit] = useState<results>();
+  const [roundToEdit, setRoundToEdit] = useState<results | undefined>();
 
   useEffect(() => {
     getResults();
@@ -84,6 +84,7 @@ function App() {
 
   const setEditModalOpenFalse = () => {
     setEditModalOpen(false);
+    setRoundToEdit(undefined);
   };
 
   return (
@@ -95,11 +96,14 @@ function App() {
           editModalOpenTrue={setEditModalOpenTrue}
         />
       )}
-      <EditRoundModal
-        open={editModalOpen}
-        onClose={setEditModalOpenFalse}
-        roundInfo={roundToEdit}
-      />
+      {roundToEdit && (
+        <EditRoundModal
+          open={editModalOpen}
+          onClose={setEditModalOpenFalse}
+          roundInfo={roundToEdit}
+          editRound={editRound}
+        />
+      )}
     </>
   );
 }
