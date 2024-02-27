@@ -17,12 +17,14 @@ interface ResultsTableProps {
     requestBody: { date: Moment; results: string[] };
   }) => void;
   editModalOpenTrue: (round: results) => void;
+  deleteModalOpenTrue: (round: results) => void;
 }
 
 const ResultsTable = ({
   rounds,
   addNewRound,
   editModalOpenTrue,
+  deleteModalOpenTrue,
 }: ResultsTableProps) => {
   const { results, numberOfPlayers } = rounds;
 
@@ -74,6 +76,10 @@ const ResultsTable = ({
             editModalOpenTrue(round);
           };
 
+          const handleDeleteClick = () => {
+            deleteModalOpenTrue(round);
+          };
+
           for (let x = 0; x < playerOrder.length; x++) {
             dataCells.push(
               <TableCell align={"center"}>{playerOrder[x]}</TableCell>
@@ -85,7 +91,10 @@ const ResultsTable = ({
               <TableCell align={"center"}>{roundDate}</TableCell>
               {dataCells}
               <TableCell align={"center"}>
-                <RoundActions editModalOpenTrue={handleEditClick} />
+                <RoundActions
+                  editModalOpenTrue={handleEditClick}
+                  deleteModalOpenTrue={handleDeleteClick}
+                />
               </TableCell>
             </TableRow>
           );
