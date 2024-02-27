@@ -7,17 +7,23 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-import { rounds } from "../../types/rounds";
+import { rounds, results } from "../../types/rounds";
 import AddNewRound from "../AddNewRound/AddNewRound";
+import RoundActions from "./RoundActions/RoundActions";
 
 interface ResultsTableProps {
   rounds: rounds;
   addNewRound: (arg0: {
     requestBody: { date: Moment; results: string[] };
   }) => void;
+  editModalOpenTrue: (round: results) => void;
 }
 
-const ResultsTable = ({ rounds, addNewRound }: ResultsTableProps) => {
+const ResultsTable = ({
+  rounds,
+  addNewRound,
+  editModalOpenTrue,
+}: ResultsTableProps) => {
   const { results, numberOfPlayers } = rounds;
 
   const RenderPlayerNumber = ({ index }: { index: number }) => {
@@ -64,6 +70,10 @@ const ResultsTable = ({ rounds, addNewRound }: ResultsTableProps) => {
 
           const roundDate = moment(date).format("MM/DD/YYYY").toString();
 
+          const handleEditClick = () => {
+            editModalOpenTrue(round);
+          };
+
           for (let x = 0; x < playerOrder.length; x++) {
             dataCells.push(
               <TableCell align={"center"}>{playerOrder[x]}</TableCell>
@@ -74,6 +84,9 @@ const ResultsTable = ({ rounds, addNewRound }: ResultsTableProps) => {
             <TableRow key={index}>
               <TableCell align={"center"}>{roundDate}</TableCell>
               {dataCells}
+              <TableCell align={"center"}>
+                <RoundActions editModalOpenTrue={handleEditClick} />
+              </TableCell>
             </TableRow>
           );
         })}

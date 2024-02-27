@@ -4,6 +4,7 @@ import { ChangeEvent } from "react";
 interface PlayerInputCellsProps {
   numberOfPlayers: number;
   playersOrder: object;
+  oldPlayersOrder?: object;
   handlePlayersInput: ({
     index,
     event,
@@ -12,6 +13,7 @@ interface PlayerInputCellsProps {
     event: ChangeEvent;
   }) => void;
   disabled: boolean;
+  edit?: boolean;
 }
 
 const PlayerInputCells = ({
@@ -19,6 +21,8 @@ const PlayerInputCells = ({
   playersOrder,
   handlePlayersInput,
   disabled,
+  edit = false,
+  oldPlayersOrder,
 }: PlayerInputCellsProps) => {
   const playerCells = [];
 
@@ -36,7 +40,7 @@ const PlayerInputCells = ({
     playerCells.push(
       <TableCell align={"center"}>
         <TextField
-          placeholder={label.toString()}
+          placeholder={edit ? oldPlayersOrder[x] : label.toString()}
           value={playersOrder[x]}
           onChange={(e) => handlePlayersInput({ index: x, event: e })}
           disabled={disabled}
