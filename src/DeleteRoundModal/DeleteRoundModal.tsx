@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Modal,
   Box,
@@ -9,7 +9,7 @@ import {
 import Grid from "@mui/material/Unstable_Grid2";
 
 import { results } from "../types/rounds";
-import moment, { Moment } from "moment";
+import moment from "moment";
 
 const style = {
   position: "absolute",
@@ -36,77 +36,18 @@ const EditRoundModal = ({
   roundInfo,
   deleteRound,
 }: EditRoundModalProps) => {
-  const { playerOrder, date, index } = roundInfo;
-  const numberOfPlayers = playerOrder.length;
+  const { date, index } = roundInfo;
 
-  const [newPlayerOrder, setNewPlayerOrder] = useState<object>({});
-  const [newDate, setNewDate] = useState<{ date: Moment; edited: boolean }>({});
   const [saving, setSaving] = useState<boolean>(false);
-  const [submitDisabled, setSubmitDisabled] = useState<boolean>(true);
-
-  useEffect(() => {
-    handleClearClick();
-  }, []);
-
-  useEffect(() => {
-    checkSubmitDisabled();
-  }, [newPlayerOrder, newDate]);
-
-  const checkSubmitDisabled = () => {
-    let disabled = true;
-
-    if (newDate?.edited) {
-      disabled = false;
-    } else {
-      disabled = checkPlayersArrayForEmpty();
-    }
-    setSubmitDisabled(disabled);
-  };
-
-  const checkPlayersArrayForEmpty = () => {
-    let disabled = true;
-
-    for (const i in Object.values(newPlayerOrder)) {
-      if (newPlayerOrder[i] === "") {
-        disabled = true;
-        break;
-      } else {
-        disabled = false;
-      }
-    }
-
-    return disabled;
-  };
-
-  const resetPlayersOrder = () => {
-    const resetPlayerObject = {};
-
-    for (let x = 0; x < numberOfPlayers; x++) {
-      resetPlayerObject[x] = "";
-    }
-
-    setNewPlayerOrder(resetPlayerObject);
-  };
-
-  const resetDate = () => {
-    setNewDate({ date: moment(date), edited: false });
-  };
-
-  const handleClearClick = () => {
-    resetPlayersOrder();
-    resetDate();
-  };
 
   const handleConfirmClick = async () => {
     setSaving(true);
     await deleteRound({ index });
-    handleClearClick();
     setSaving(false);
     onClose();
   };
 
   const handleOnClose = () => {
-    handleClearClick();
     onClose();
   };
 
@@ -139,7 +80,7 @@ const EditRoundModal = ({
                 <Button color={"error"} onClick={handleConfirmClick}>
                   delete
                 </Button>
-              )}{" "}
+              )}
             </Grid>
           </Grid>
         </Grid>
