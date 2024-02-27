@@ -121,7 +121,11 @@ const AddNewRound = ({ numberOfPlayers, addNewRound }: AddNewRoundProps) => {
                 <SaveOutlined />
               </IconButton>
             )}
-            <IconButton color={"error"} onClick={handleClearClick}>
+            <IconButton
+              disabled={submitDisabled}
+              color={"error"}
+              onClick={handleClearClick}
+            >
               <DeleteOutlineOutlined />
             </IconButton>
           </ButtonGroup>

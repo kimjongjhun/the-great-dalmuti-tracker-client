@@ -4,6 +4,7 @@ import ResultsTable from "./Components/ResultsTable/ResultsTable";
 import { results, rounds } from "./types/rounds";
 import { Moment } from "moment";
 import EditRoundModal from "./EditRoundModal/EditRoundModal";
+import DeleteRoundModal from "./DeleteRoundModal/DeleteRoundModal";
 
 const BASE_SERVER_URL = "http://127.0.0.1:5000";
 
@@ -12,6 +13,8 @@ function App() {
   const [dalmutiResults, setDalmutiResults] = useState<rounds>();
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [roundToEdit, setRoundToEdit] = useState<results | undefined>();
+  const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
+  const [roundToDelete, setRoundToDelete] = useState<results | undefined>();
 
   useEffect(() => {
     getResults();
@@ -77,6 +80,17 @@ function App() {
     }
   };
 
+  const deleteRound = async ({ index }: { index: number }) => {
+    try {
+      await fetch(BASE_SERVER_URL + "/delete-round/" + index, {
+        method: "DELETE",
+      });
+      getResults();
+    } catch (e) {
+      console.error("Error while deleting round:", e);
+    }
+  };
+
   const setEditModalOpenTrue = (round: results) => {
     setEditModalOpen(true);
     setRoundToEdit(round);
@@ -87,6 +101,16 @@ function App() {
     setRoundToEdit(undefined);
   };
 
+  const setDeleteModalOpenTrue = (round: results) => {
+    setDeleteModalOpen(true);
+    setRoundToDelete(round);
+  };
+
+  const setDeleteModalOpenFalse = () => {
+    setDeleteModalOpen(false);
+    setRoundToDelete(undefined);
+  };
+
   return (
     <>
       {!dataLoading && dalmutiResults && (
@@ -94,6 +118,7 @@ function App() {
           rounds={dalmutiResults}
           addNewRound={addNewRound}
           editModalOpenTrue={setEditModalOpenTrue}
+          deleteModalOpenTrue={setDeleteModalOpenTrue}
         />
       )}
       {roundToEdit && (
@@ -102,6 +127,14 @@ function App() {
           onClose={setEditModalOpenFalse}
           roundInfo={roundToEdit}
           editRound={editRound}
+        />
+      )}
+      {roundToDelete && (
+        <DeleteRoundModal
+          open={deleteModalOpen}
+          onClose={setDeleteModalOpenFalse}
+          roundInfo={roundToDelete}
+          deleteRound={deleteRound}
         />
       )}
     </>
