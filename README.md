@@ -1,30 +1,43 @@
-# React + TypeScript + Vite
+# The Great Dalmuti Tracker
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<p align="center">
+<img src="https://upload.wikimedia.org/wikipedia/en/3/34/The_Great_Dalmuti_cover.jpg" alt="Cover of the Great Dalmuti box" />
+</p>
 
-Currently, two official plugins are available:
+## Dalmuti? What is a Dalmuti?
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+[The Great Dalmuti](https://en.wikipedia.org/wiki/The_Great_Dalmuti) is a card game for 4-8 players that is a commercial version of the popular card game, President. The object of the game is to be the first person to get rid of all your cards and become the Great Dalmuti.
 
-## Expanding the ESLint configuration
+## What is the tracker for?
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Just for fun.
 
-- Configure the top-level `parserOptions` property like this:
+To keep track of the end result of each session, and then to see historical who has been the Dalmuti most, who has been the Peasant the most.
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+## Tech used
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+- [React](https://react.dev/)
+- [Vite](https://vitejs.dev/)
+- [TypeScript](https://vitejs.dev/)
+- [Material UI](https://mui.com/)
+- [Moment](https://momentjs.com/)
+
+## Installation
+
+Clone the repo, `cd` into the directory, `npm install` the dependencies, and then `npm run dev` to get it up and running.
+
+Eventually, the app will be deployed on a production server so that no cloning and running locally will be required, unless it's for development purposes.
+
+## How to use
+
+If there is not a game in progress already, you will enter details to create a new game and enter your first round of The Great Dalmuti.
+
+If there is an existing game already, just add the names in the order that the session ended in, the date will automatically default to the current day, but you can set it to when the session was, and then click save.
+
+If you need to edit a particular round, click on the edit button, edit the necessary details and click on save.
+
+To delete a round, click on the delete button and confirm your decision.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
