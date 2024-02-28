@@ -28,7 +28,7 @@ const AddNewRound = ({ numberOfPlayers, addNewRound }: AddNewRoundProps) => {
 
   useEffect(() => {
     setPlayersOrderToEmpty();
-  }, []);
+  }, [numberOfPlayers]);
 
   useEffect(() => {
     checkSubmitDisabled();

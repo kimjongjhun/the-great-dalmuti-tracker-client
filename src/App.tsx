@@ -5,6 +5,7 @@ import { results, rounds } from "./types/rounds";
 import { Moment } from "moment";
 import EditRoundModal from "./EditRoundModal/EditRoundModal";
 import DeleteRoundModal from "./DeleteRoundModal/DeleteRoundModal";
+import AddFirstRound from "./Components/AddFirstRound/AddFirstRound";
 
 const BASE_SERVER_URL = "http://127.0.0.1:5000";
 
@@ -15,6 +16,7 @@ function App() {
   const [roundToEdit, setRoundToEdit] = useState<results | undefined>();
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const [roundToDelete, setRoundToDelete] = useState<results | undefined>();
+  const [firstRound, setFirstRound] = useState<boolean>(false);
 
   useEffect(() => {
     getResults();
@@ -31,6 +33,7 @@ function App() {
     }
 
     setDalmutiResults(rounds.data);
+    setFirstRound(!rounds.data.results.length);
     setDataLoading(false);
   };
 
@@ -91,6 +94,37 @@ function App() {
     }
   };
 
+  const RenderExistingGame = () => {
+    return (
+      <>
+        {!dataLoading && dalmutiResults && (
+          <ResultsTable
+            rounds={dalmutiResults}
+            addNewRound={addNewRound}
+            editModalOpenTrue={setEditModalOpenTrue}
+            deleteModalOpenTrue={setDeleteModalOpenTrue}
+          />
+        )}
+        {roundToEdit && (
+          <EditRoundModal
+            open={editModalOpen}
+            onClose={setEditModalOpenFalse}
+            roundInfo={roundToEdit}
+            editRound={editRound}
+          />
+        )}
+        {roundToDelete && (
+          <DeleteRoundModal
+            open={deleteModalOpen}
+            onClose={setDeleteModalOpenFalse}
+            roundInfo={roundToDelete}
+            deleteRound={deleteRound}
+          />
+        )}
+      </>
+    );
+  };
+
   const setEditModalOpenTrue = (round: results) => {
     setEditModalOpen(true);
     setRoundToEdit(round);
@@ -113,29 +147,10 @@ function App() {
 
   return (
     <>
-      {!dataLoading && dalmutiResults && (
-        <ResultsTable
-          rounds={dalmutiResults}
-          addNewRound={addNewRound}
-          editModalOpenTrue={setEditModalOpenTrue}
-          deleteModalOpenTrue={setDeleteModalOpenTrue}
-        />
-      )}
-      {roundToEdit && (
-        <EditRoundModal
-          open={editModalOpen}
-          onClose={setEditModalOpenFalse}
-          roundInfo={roundToEdit}
-          editRound={editRound}
-        />
-      )}
-      {roundToDelete && (
-        <DeleteRoundModal
-          open={deleteModalOpen}
-          onClose={setDeleteModalOpenFalse}
-          roundInfo={roundToDelete}
-          deleteRound={deleteRound}
-        />
+      {firstRound ? (
+        <AddFirstRound createGame={addNewRound} />
+      ) : (
+        <RenderExistingGame />
       )}
     </>
   );
