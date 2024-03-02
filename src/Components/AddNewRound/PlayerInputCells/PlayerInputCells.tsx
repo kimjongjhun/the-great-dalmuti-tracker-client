@@ -1,19 +1,14 @@
-import { TableCell, TextField } from "@mui/material";
-import { ChangeEvent } from "react";
+import { Autocomplete, TableCell, TextField } from "@mui/material";
 
 interface PlayerInputCellsProps {
   numberOfPlayers: number;
   playersOrder: object;
   oldPlayersOrder?: object;
-  handlePlayersInput: ({
-    index,
-    event,
-  }: {
-    index: number;
-    event: ChangeEvent;
-  }) => void;
+  handlePlayersInput: (label: string, index: number) => void;
   disabled: boolean;
   edit?: boolean;
+  playerNames: { label: string }[];
+  first?: boolean;
 }
 
 const PlayerInputCells = ({
@@ -23,11 +18,13 @@ const PlayerInputCells = ({
   disabled,
   edit = false,
   oldPlayersOrder,
+  playerNames,
+  first = false,
 }: PlayerInputCellsProps) => {
   const playerCells = [];
 
   for (let x = 0; x < numberOfPlayers; x++) {
-    let label;
+    let label: string | number;
 
     if (x === 0) {
       label = "Dalmuti";
@@ -39,12 +36,31 @@ const PlayerInputCells = ({
 
     playerCells.push(
       <TableCell align={"center"}>
-        <TextField
-          placeholder={edit ? oldPlayersOrder[x] : label.toString()}
-          value={playersOrder[x]}
-          onChange={(e) => handlePlayersInput({ index: x, event: e })}
-          disabled={disabled}
-        />
+        {first ? (
+          <TextField
+            placeholder={edit ? oldPlayersOrder[x] : label.toString()}
+            value={playersOrder[x]}
+            onChange={(e) => handlePlayersInput(e.target.value, x)}
+            disabled={disabled}
+          />
+        ) : (
+          <Autocomplete
+            disablePortal
+            id="combo-box-demo"
+            options={playerNames}
+            onChange={(_, value) => {
+              handlePlayersInput(value?.label, x);
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                value={playersOrder[x]}
+                disabled={disabled}
+                label={edit ? oldPlayersOrder[x] : label.toString()}
+              />
+            )}
+          />
+        )}
       </TableCell>
     );
   }

@@ -33,7 +33,7 @@ function App() {
     }
 
     setDalmutiResults(rounds.data);
-    setFirstRound(!rounds.data.results.length);
+    setFirstRound(!rounds?.data?.results?.length);
     setDataLoading(false);
   };
 

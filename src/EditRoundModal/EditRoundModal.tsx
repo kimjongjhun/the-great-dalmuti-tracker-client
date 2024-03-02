@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Modal,
   Box,
@@ -57,17 +57,39 @@ const EditRoundModal = ({
   const numberOfPlayers = playerOrder.length;
 
   const [newPlayerOrder, setNewPlayerOrder] = useState<object>({});
-  const [newDate, setNewDate] = useState<{ date: Moment; edited: boolean }>({});
+  const [newDate, setNewDate] = useState<{ date: Moment; edited: boolean }>({
+    date: moment(),
+    edited: false,
+  });
   const [saving, setSaving] = useState<boolean>(false);
   const [submitDisabled, setSubmitDisabled] = useState<boolean>(true);
+  const [playersList, setPlayersList] = useState<{ label: string }[]>([]);
 
   useEffect(() => {
     handleClearClick();
+    setPlayersSelectList();
   }, []);
 
   useEffect(() => {
     checkSubmitDisabled();
   }, [newPlayerOrder, newDate]);
+
+  const setPlayersSelectList = (name?: string) => {
+    if (name) {
+      const filteredList = playersList.filter(
+        (player) => player.label !== name
+      );
+      setPlayersList(filteredList);
+    } else {
+      setPlayersList(
+        playerOrder.map((player: string) => {
+          return {
+            label: player,
+          };
+        })
+      );
+    }
+  };
 
   const checkSubmitDisabled = () => {
     let disabled = true;
@@ -99,14 +121,9 @@ const EditRoundModal = ({
     setNewDate({ date: moment(input), edited: true });
   };
 
-  const handlePlayersInput = ({
-    index,
-    event,
-  }: {
-    index: number;
-    event: ChangeEvent;
-  }) => {
-    setNewPlayerOrder({ ...newPlayerOrder, [index]: event.target.value });
+  const handlePlayersInput = (value: string, index: number) => {
+    setPlayersSelectList(value);
+    setNewPlayerOrder({ ...newPlayerOrder, [index]: value });
   };
 
   const resetPlayersOrder = () => {
@@ -220,6 +237,7 @@ const EditRoundModal = ({
                 oldPlayersOrder={playerOrder}
                 handlePlayersInput={handlePlayersInput}
                 disabled={saving}
+                playerNames={playersList}
               />
               <RenderActionsCell
                 saving={saving}
