@@ -51,6 +51,7 @@ const AddFirstRound = ({ createGame }: AddFirstRoundProps) => {
         <Grid xs={12}>
           <Table>
             <AddNewRound
+              first
               numberOfPlayers={numberOfPlayers}
               addNewRound={createGame}
             />

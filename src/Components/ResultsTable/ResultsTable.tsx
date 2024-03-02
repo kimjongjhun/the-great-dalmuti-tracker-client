@@ -70,7 +70,7 @@ const ResultsTable = ({
           const { date, playerOrder } = round;
           const dataCells = [];
 
-          const roundDate = moment(date).format("MM/DD/YYYY").toString();
+          const roundDate = moment.utc(date).format("MM/DD/YYYY").toString();
 
           const handleEditClick = () => {
             editModalOpenTrue(round);
@@ -111,6 +111,7 @@ const ResultsTable = ({
         <AddNewRound
           numberOfPlayers={numberOfPlayers}
           addNewRound={addNewRound}
+          playersList={results.slice(-1)[0].playerOrder.sort()}
         />
       </Table>
     </TableContainer>

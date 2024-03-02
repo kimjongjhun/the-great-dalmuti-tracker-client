@@ -1,4 +1,4 @@
-import { ChangeEvent, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   ButtonGroup,
   TableBody,
@@ -14,17 +14,29 @@ import DateInputCell from "./DateInputCell/DateInputCell";
 import PlayerInputCells from "./PlayerInputCells/PlayerInputCells";
 
 interface AddNewRoundProps {
+  first?: boolean;
   numberOfPlayers: number;
   addNewRound: (arg0: {
     requestBody: { date: Moment; results: string[] };
   }) => void;
+  playersList: string[];
 }
 
-const AddNewRound = ({ numberOfPlayers, addNewRound }: AddNewRoundProps) => {
+const AddNewRound = ({
+  first = false,
+  numberOfPlayers,
+  addNewRound,
+  playersList,
+}: AddNewRoundProps) => {
   const [dateInput, setDateInput] = useState<Moment>(moment());
   const [playersOrder, setPlayersOrder] = useState({});
   const [submitDisabled, setSubmitDisabled] = useState<boolean>(true);
   const [saving, setSaving] = useState<boolean>(false);
+  const [playersSelectList, setPlayersSelectList] = useState<string[]>([]);
+
+  useEffect(() => {
+    createPlayersSelectList();
+  }, []);
 
   useEffect(() => {
     setPlayersOrderToEmpty();
@@ -33,6 +45,17 @@ const AddNewRound = ({ numberOfPlayers, addNewRound }: AddNewRoundProps) => {
   useEffect(() => {
     checkSubmitDisabled();
   }, [playersOrder]);
+
+  const createPlayersSelectList = (name?: string) => {
+    if (name) {
+      const filteredList = playersSelectList.filter(
+        (player) => player !== name
+      );
+      setPlayersSelectList(filteredList);
+    } else {
+      setPlayersSelectList(playersList);
+    }
+  };
 
   const setPlayersOrderToEmpty = () => {
     const playersOrderObject = {};
@@ -43,7 +66,7 @@ const AddNewRound = ({ numberOfPlayers, addNewRound }: AddNewRoundProps) => {
   };
 
   const setDateToToday = () => {
-    const today = moment();
+    const today = moment.utc();
 
     setDateInput(today);
   };
@@ -52,14 +75,11 @@ const AddNewRound = ({ numberOfPlayers, addNewRound }: AddNewRoundProps) => {
     setDateInput(moment(input));
   };
 
-  const handlePlayersInput = ({
-    index,
-    event,
-  }: {
-    index: number;
-    event: ChangeEvent;
-  }) => {
-    setPlayersOrder({ ...playersOrder, [index]: event.target.value });
+  const handlePlayersInput = (value: string, index: number) => {
+    if (!first) {
+      createPlayersSelectList(value);
+    }
+    setPlayersOrder({ ...playersOrder, [index]: value });
   };
 
   const checkSubmitDisabled = () => {
@@ -103,10 +123,14 @@ const AddNewRound = ({ numberOfPlayers, addNewRound }: AddNewRoundProps) => {
           disabled={saving}
         />
         <PlayerInputCells
+          first={first}
           numberOfPlayers={numberOfPlayers}
           playersOrder={playersOrder}
           handlePlayersInput={handlePlayersInput}
           disabled={saving}
+          playerNames={playersSelectList?.map((player) => {
+            return { label: player };
+          })}
         />
         <TableCell align={"center"}>
           <ButtonGroup variant={"outlined"}>
