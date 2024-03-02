@@ -32,7 +32,7 @@ const PlayerInputCells = ({
     if (x === 0) {
       label = "Dalmuti";
     } else if (x === numberOfPlayers - 1) {
-      label = "Serf";
+      label = "Peasant";
     } else {
       label = x + 1;
     }

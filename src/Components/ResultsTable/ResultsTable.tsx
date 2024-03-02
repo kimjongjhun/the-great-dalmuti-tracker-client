@@ -34,7 +34,7 @@ const ResultsTable = ({
     if (index === 0) {
       label = "Dalmuti";
     } else if (index === numberOfPlayers - 1) {
-      label = "Serf";
+      label = "Peasant";
     } else {
       label = index + 1;
     }
