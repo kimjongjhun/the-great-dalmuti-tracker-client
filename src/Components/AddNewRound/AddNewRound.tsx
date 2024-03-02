@@ -19,7 +19,7 @@ interface AddNewRoundProps {
   addNewRound: (arg0: {
     requestBody: { date: Moment; results: string[] };
   }) => void;
-  playersList: string[];
+  playersList?: string[];
 }
 
 const AddNewRound = ({
