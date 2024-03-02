@@ -111,7 +111,7 @@ const ResultsTable = ({
         <AddNewRound
           numberOfPlayers={numberOfPlayers}
           addNewRound={addNewRound}
-          playersList={results.slice(-1)[0].playerOrder.sort()}
+          playersList={[...results.slice(-1)[0].playerOrder].sort()}
         />
       </Table>
     </TableContainer>
