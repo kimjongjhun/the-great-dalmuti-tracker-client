@@ -65,8 +65,8 @@ function App() {
   }: {
     index: number;
     requestBody: {
-      date: Moment;
-      results: string[];
+      date?: Moment;
+      results?: string[];
     };
   }) => {
     try {

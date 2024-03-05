@@ -26,7 +26,7 @@ const style = {
 interface EditRoundModalProps {
   open: boolean;
   onClose: () => void;
-  roundInfo: results | undefined;
+  roundInfo: results;
   deleteRound: (arg0: { index: number }) => void;
 }
 
