@@ -33,7 +33,7 @@ const style = {
 interface EditRoundModalProps {
   open: boolean;
   onClose: () => void;
-  roundInfo: results | undefined;
+  roundInfo: results;
   editRound: (arg0: {
     index: number;
     requestBody: { date: Moment | undefined; results: string[] | undefined };
@@ -56,7 +56,9 @@ const EditRoundModal = ({
   const { playerOrder, date, index } = roundInfo;
   const numberOfPlayers = playerOrder.length;
 
-  const [newPlayerOrder, setNewPlayerOrder] = useState<object>({});
+  const [newPlayerOrder, setNewPlayerOrder] = useState<{
+    [index: number]: string;
+  }>({});
   const [newDate, setNewDate] = useState<{ date: Moment; edited: boolean }>({
     date: moment(),
     edited: false,
@@ -123,11 +125,13 @@ const EditRoundModal = ({
 
   const handlePlayersInput = (value: string, index: number) => {
     setPlayersSelectList(value);
-    setNewPlayerOrder({ ...newPlayerOrder, [index]: value });
+    setNewPlayerOrder((previousOrder: { [index: number]: string }) => {
+      return { ...previousOrder, [index as number]: value };
+    });
   };
 
   const resetPlayersOrder = () => {
-    const resetPlayerObject = {};
+    const resetPlayerObject: { [index: number]: string } = {};
 
     for (let x = 0; x < numberOfPlayers; x++) {
       resetPlayerObject[x] = "";

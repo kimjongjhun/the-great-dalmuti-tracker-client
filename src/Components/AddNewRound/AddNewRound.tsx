@@ -26,10 +26,12 @@ const AddNewRound = ({
   first = false,
   numberOfPlayers,
   addNewRound,
-  playersList,
+  playersList = [],
 }: AddNewRoundProps) => {
   const [dateInput, setDateInput] = useState<Moment>(moment());
-  const [playersOrder, setPlayersOrder] = useState({});
+  const [playersOrder, setPlayersOrder] = useState<{ [index: number]: string }>(
+    {}
+  );
   const [submitDisabled, setSubmitDisabled] = useState<boolean>(true);
   const [saving, setSaving] = useState<boolean>(false);
   const [playersSelectList, setPlayersSelectList] = useState<string[]>([]);
@@ -58,7 +60,7 @@ const AddNewRound = ({
   };
 
   const setPlayersOrderToEmpty = () => {
-    const playersOrderObject = {};
+    const playersOrderObject: { [index: number]: string } = {};
     for (let x = 0; x < numberOfPlayers; x++) {
       playersOrderObject[x] = "";
     }

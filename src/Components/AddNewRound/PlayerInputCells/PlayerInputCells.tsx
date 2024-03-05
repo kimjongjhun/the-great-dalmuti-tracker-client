@@ -2,9 +2,9 @@ import { Autocomplete, TableCell, TextField } from "@mui/material";
 
 interface PlayerInputCellsProps {
   numberOfPlayers: number;
-  playersOrder: object;
-  oldPlayersOrder?: object;
-  handlePlayersInput: (label: string, index: number) => void;
+  playersOrder: { [index: number]: string };
+  oldPlayersOrder?: { [index: number]: string };
+  handlePlayersInput: (value: string, index: number) => void;
   disabled: boolean;
   edit?: boolean;
   playerNames: { label: string }[];
@@ -38,7 +38,7 @@ const PlayerInputCells = ({
       <TableCell align={"center"}>
         {first ? (
           <TextField
-            placeholder={edit ? oldPlayersOrder[x] : label.toString()}
+            placeholder={edit ? oldPlayersOrder?.[x] : label.toString()}
             value={playersOrder[x]}
             onChange={(e) => handlePlayersInput(e.target.value, x)}
             disabled={disabled}
@@ -48,15 +48,15 @@ const PlayerInputCells = ({
             disablePortal
             id="combo-box-demo"
             options={playerNames}
-            onChange={(_, value) => {
-              handlePlayersInput(value?.label, x);
+            onChange={(_, value: { label: string } | null) => {
+              handlePlayersInput(value?.label as string, x);
             }}
             renderInput={(params) => (
               <TextField
                 {...params}
                 value={playersOrder[x]}
                 disabled={disabled}
-                label={edit ? oldPlayersOrder[x] : label.toString()}
+                label={edit ? oldPlayersOrder?.[x] : label.toString()}
               />
             )}
           />
