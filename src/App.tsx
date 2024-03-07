@@ -2,12 +2,10 @@ import { useEffect, useState } from "react";
 
 import ResultsTable from "./Components/ResultsTable/ResultsTable";
 import { results, rounds } from "./types/rounds";
-import { Moment } from "moment";
 import EditRoundModal from "./EditRoundModal/EditRoundModal";
 import DeleteRoundModal from "./DeleteRoundModal/DeleteRoundModal";
 import AddFirstRound from "./Components/AddFirstRound/AddFirstRound";
-
-const BASE_SERVER_URL = "http://127.0.0.1:5000";
+import { getResults, addNewRound, editRound, deleteRound } from "./api/rounds";
 
 function App() {
   const [dataLoading, setDataLoading] = useState<boolean>(true);
@@ -19,79 +17,58 @@ function App() {
   const [firstRound, setFirstRound] = useState<boolean>(false);
 
   useEffect(() => {
-    getResults();
+    getResultsWrapper();
   }, []);
 
-  const getResults = async () => {
-    let response, rounds;
-
-    try {
-      response = await fetch(BASE_SERVER_URL + "/get-all-rounds");
-      rounds = await response.json();
-    } catch (e) {
-      console.error("Error while fetching data:", e);
-    }
-
-    setDalmutiResults(rounds.data);
-    setFirstRound(!rounds?.data?.results?.length);
-    setDataLoading(false);
+  const getResultsWrapper = async () => {
+    const results = await getResults();
+    handleApiCallEnd(results);
   };
 
-  const addNewRound = async ({
+  const addNewRoundWrapper = async ({
     requestBody,
   }: {
     requestBody: {
-      date: Moment;
+      date: moment.Moment;
       results: string[];
     };
   }) => {
-    try {
-      await fetch(BASE_SERVER_URL + "/add-new-round", {
-        method: "POST",
-        body: JSON.stringify(requestBody),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      getResults();
-    } catch (e) {
-      console.error("Error while saving round:", e);
-    }
+    const results = await addNewRound({ requestBody });
+    handleApiCallEnd(results);
   };
 
-  const editRound = async ({
+  const editRoundWrapper = async ({
     index,
     requestBody,
   }: {
     index: number;
     requestBody: {
-      date?: Moment;
-      results?: string[];
+      date?: moment.Moment | undefined;
+      results?: string[] | undefined;
     };
   }) => {
-    try {
-      await fetch(BASE_SERVER_URL + "/edit-round/" + index, {
-        method: "PATCH",
-        body: JSON.stringify(requestBody),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      getResults();
-    } catch (e) {
-      console.error("Error while editing round:", e);
-    }
+    const results = await editRound({
+      index,
+      requestBody,
+    });
+    handleApiCallEnd(results);
   };
 
-  const deleteRound = async ({ index }: { index: number }) => {
-    try {
-      await fetch(BASE_SERVER_URL + "/delete-round/" + index, {
-        method: "DELETE",
-      });
-      getResults();
-    } catch (e) {
-      console.error("Error while deleting round:", e);
-    }
+  const deleteRoundWrapper = async ({ index }: { index: number }) => {
+    const results = await deleteRound({ index });
+    handleApiCallEnd(results);
+  };
+
+  const handleApiCallEnd = (results: {
+    data: {
+      numberOfPlayers: number;
+      results: results[];
+    };
+    message: string;
+  }) => {
+    setDalmutiResults(results.data);
+    setFirstRound(!results?.data?.results?.length);
+    setDataLoading(false);
   };
 
   const RenderExistingGame = () => {
@@ -100,7 +77,7 @@ function App() {
         {!dataLoading && dalmutiResults && (
           <ResultsTable
             rounds={dalmutiResults}
-            addNewRound={addNewRound}
+            addNewRound={addNewRoundWrapper}
             editModalOpenTrue={setEditModalOpenTrue}
             deleteModalOpenTrue={setDeleteModalOpenTrue}
           />
@@ -110,7 +87,7 @@ function App() {
             open={editModalOpen}
             onClose={setEditModalOpenFalse}
             roundInfo={roundToEdit}
-            editRound={editRound}
+            editRound={editRoundWrapper}
           />
         )}
         {roundToDelete && (
@@ -118,7 +95,7 @@ function App() {
             open={deleteModalOpen}
             onClose={setDeleteModalOpenFalse}
             roundInfo={roundToDelete}
-            deleteRound={deleteRound}
+            deleteRound={deleteRoundWrapper}
           />
         )}
       </>
@@ -148,7 +125,7 @@ function App() {
   return (
     <>
       {firstRound ? (
-        <AddFirstRound createGame={addNewRound} />
+        <AddFirstRound createGame={addNewRoundWrapper} />
       ) : (
         <RenderExistingGame />
       )}
