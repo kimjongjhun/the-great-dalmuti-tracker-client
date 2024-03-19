@@ -1,6 +1,6 @@
 import { Moment } from "moment";
 
-const BASE_SERVER_URL = "http://127.0.0.1:5000";
+const BASE_SERVER_URL = import.meta.env.VITE_BASE_SERVER_URL || "";
 const PAGE = "/rounds";
 
 const getResults = async () => {
